@@ -140,3 +140,27 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
+
+
+
+STRIPE_PUBLIC_KEY = ''          
+STRIPE_SECRET_KEY = ''          
+STRIPE_WEBHOOK_SECRET = 'whsec_...'          
+
+
+PLAN_PRICES = {
+    'pro': 5,        
+    'business': 10,  
+}
+
+
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  # keyin domain qo‘shasiz
+
+# Static fayllar uchun
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Xavfsizlik (DEBUG=False bo‘lganda)
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'

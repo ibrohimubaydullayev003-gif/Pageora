@@ -63,11 +63,11 @@ def dashboard(request):
 
 @login_required
 def create_website(request):
-    profile = request.user.profile
+    profile, _ = Profile.objects.get_or_create(user=request.user)
     current_count = Website.objects.filter(user=request.user).count()
 
     if current_count >= profile.get_website_limit():
-        messages.warning(request, f"Sizning {profile.get_plan_display()} tarifingizda faqat {profile.get_website_limit()} ta sayt yaratish mumkin. Pro tarifga o‘ting.")
+        messages.warning(request, f"Sizning {profile.get_plan_display()} tarifingizda faqat {profile.get_website_limit()} ta sayt yaratish mumkin.")
         return redirect('dashboard')
 
     if request.method == 'POST':
@@ -75,15 +75,28 @@ def create_website(request):
         if form.is_valid():
             website = form.save(commit=False)
             website.user = request.user
+
+            # Tarifga qarab cheklash
+            if profile.plan == 'free':
+                website.logo = None
+                website.favicon = None
+                website.hero_image = None
+                website.about_image = None
+                website.custom_css = ''
+                website.custom_domain = ''
+                website.remove_branding = False
+
             website.save()
             messages.success(request, "Sayt muvaffaqiyatli yaratildi!")
             return redirect('dashboard')
     else:
         form = WebsiteForm()
+
     return render(request, 'accounts/create_edit.html', {
         'form': form,
         'title': 'Yangi sayt yaratish',
-        'button_text': 'Yaratish'
+        'button_text': 'Yaratish',
+        'plan': profile.plan,
     })
 
 
@@ -195,3 +208,113 @@ def buy_plan(request, plan):
 def my_orders(request):
     orders = Order.objects.filter(user=request.user)
     return render(request, 'accounts/my_orders.html', {'orders': orders})
+
+
+
+
+
+
+
+import stripe
+from django.conf import settings
+from django.urls import reverse
+from django.utils import timezone
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+@login_required
+def create_checkout_session(request, plan):
+    if plan not in ['pro', 'business']:
+        messages.error(request, "Noto‘g‘ri tarif")
+        return redirect('pricing')
+
+    # Allaqachon shu tarif yoki undan yuqori bo‘lsa
+    current_plan = request.user.profile.plan
+    if current_plan == 'business' or (current_plan == 'pro' and plan == 'pro'):
+        messages.info(request, "Sizda bu tarif allaqachon bor.")
+        return redirect('dashboard')
+
+    prices = getattr(settings, 'PLAN_PRICES', {'pro': 5, 'business': 10})
+    amount = prices.get(plan, 5)
+
+    try:
+        order = Order.objects.create(
+            user=request.user,
+            plan=plan,
+            amount=amount,
+            status='pending'
+        )
+
+        # Test uchun USD (1$ = Pro, 2$ = Business)
+        unit_amount = 100 if plan == 'pro' else 200
+
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'usd',
+                    'product_data': {
+                        'name': f'Pageora {plan.upper()} tarif',
+                        'description': f'Pageora {plan} rejasi',
+                    },
+                    'unit_amount': unit_amount,
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=request.build_absolute_uri(
+                reverse('payment_success')
+            ) + f'?session_id={{CHECKOUT_SESSION_ID}}&order_id={order.id}',
+            cancel_url=request.build_absolute_uri(reverse('pricing')),
+            client_reference_id=str(order.id),
+            metadata={
+                'order_id': str(order.id),
+                'user_id': str(request.user.id),
+                'plan': plan,
+            }
+        )
+
+        order.stripe_session_id = session.id
+        order.save()
+
+        return redirect(session.url, code=303)
+
+    except Exception as e:
+        messages.error(request, f"To‘lovni boshlashda xato: {str(e)}")
+        return redirect('pricing')
+
+
+@login_required
+def payment_success(request):
+    session_id = request.GET.get('session_id')
+    order_id = request.GET.get('order_id')
+
+    if not session_id or not order_id:
+        messages.error(request, "Noto‘g‘ri so‘rov")
+        return redirect('dashboard')
+
+    try:
+        session = stripe.checkout.Session.retrieve(session_id)
+        order = Order.objects.get(id=order_id, user=request.user)
+
+        if session.payment_status == 'paid' and order.status != 'paid':
+            order.status = 'paid'
+            order.paid_at = timezone.now()
+            order.stripe_payment_intent = session.payment_intent or ''
+            order.save()
+
+            profile = request.user.profile
+            profile.plan = order.plan
+            profile.save()
+
+            messages.success(request, f"Tabriklaymiz! «{order.get_plan_display()}» tarifi muvaffaqiyatli faollashtirildi!")
+        else:
+            messages.warning(request, "To‘lov hali tasdiqlanmagan. Bir oz kutib, qayta tekshiring.")
+
+    except Order.DoesNotExist:
+        messages.error(request, "Buyurtma topilmadi")
+    except Exception as e:
+        messages.error(request, f"Xato: {str(e)}")
+
+    return redirect('dashboard')

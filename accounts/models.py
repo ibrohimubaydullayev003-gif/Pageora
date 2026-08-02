@@ -46,24 +46,26 @@ def save_user_profile(sender, instance, **kwargs):
 class Website(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='websites')
     
-    # Asosiy ma'lumotlar
-    title = models.CharField(max_length=200, verbose_name="Sayt nomi")
+    title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=220, unique=True, blank=True)
     
     # SEO
-    meta_title = models.CharField(max_length=70, blank=True, help_text="Google uchun (70 belgidan oshmasin)")
-    meta_description = models.CharField(max_length=160, blank=True, help_text="Google uchun (160 belgidan oshmasin)")
+    meta_title = models.CharField(max_length=70, blank=True)
+    meta_description = models.CharField(max_length=160, blank=True)
     
     # Dizayn
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     favicon = models.ImageField(upload_to='favicons/', blank=True, null=True)
+    hero_image = models.ImageField(upload_to='heroes/', blank=True, null=True)
+    about_image = models.ImageField(upload_to='about/', blank=True, null=True)
+    
     background_color = models.CharField(max_length=20, default="#0f172a")
     text_color = models.CharField(max_length=20, default="#f8fafc")
     accent_color = models.CharField(max_length=20, default="#6366f1")
     
-    # Kontent (bo‘limlar)
-    hero_title = models.CharField(max_length=200, blank=True, verbose_name="Hero sarlavha")
-    hero_subtitle = models.CharField(max_length=300, blank=True, verbose_name="Hero pastki matn")
+    # Kontent
+    hero_title = models.CharField(max_length=200, blank=True)
+    hero_subtitle = models.CharField(max_length=300, blank=True)
     hero_button_text = models.CharField(max_length=50, blank=True, default="Bog‘lanish")
     hero_button_link = models.CharField(max_length=200, blank=True, default="#contact")
     
@@ -71,7 +73,7 @@ class Website(models.Model):
     about_content = models.TextField(blank=True)
     
     services_title = models.CharField(max_length=150, blank=True, default="Xizmatlar")
-    services_content = models.TextField(blank=True, help_text="Har bir xizmatni yangi qatordan yozing")
+    services_content = models.TextField(blank=True)
     
     contact_title = models.CharField(max_length=150, blank=True, default="Bog‘lanish")
     contact_email = models.EmailField(blank=True)
@@ -80,8 +82,11 @@ class Website(models.Model):
     contact_telegram = models.CharField(max_length=100, blank=True)
     contact_instagram = models.CharField(max_length=100, blank=True)
     
-    # Qo‘shimcha
-    custom_css = models.TextField(blank=True, help_text="Qo‘shimcha CSS (ixtiyoriy)")
+    # Business uchun
+    custom_domain = models.CharField(max_length=255, blank=True, help_text="masalan: mening-saytim.uz")
+    remove_branding = models.BooleanField(default=False)  # Business
+    
+    custom_css = models.TextField(blank=True)
     is_published = models.BooleanField(default=True)
     views_count = models.PositiveIntegerField(default=0)
     
@@ -90,8 +95,6 @@ class Website(models.Model):
 
     class Meta:
         ordering = ['-updated_at']
-        verbose_name = "Sayt"
-        verbose_name_plural = "Saytlar"
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -102,52 +105,55 @@ class Website(models.Model):
                 slug = f"{base_slug}-{counter}"
                 counter += 1
             self.slug = slug
-        
-        # SEO default qiymatlar
         if not self.meta_title:
             self.meta_title = self.title[:70]
-        if not self.meta_description and self.hero_subtitle:
-            self.meta_description = self.hero_subtitle[:160]
-            
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.title} ({self.user.username})"
-
-    def get_absolute_url(self):
-        return f"/s/{self.slug}/"
 
     def increment_views(self):
         self.views_count += 1
         self.save(update_fields=['views_count'])
 
 
+class WebsiteImage(models.Model):
+    """Galereya rasmlari"""
+    website = models.ForeignKey(Website, on_delete=models.CASCADE, related_name='gallery')
+    image = models.ImageField(upload_to='gallery/')
+    title = models.CharField(max_length=100, blank=True)
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['order', 'created_at']
+
+    def __str__(self):
+        return f"{self.website.title} - rasm"
 
 class Order(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Kutilmoqda'),
         ('paid', 'To‘langan'),
+        ('failed', 'Muvaffaqiyatsiz'),
         ('cancelled', 'Bekor qilingan'),
     ]
-
     PLAN_CHOICES = [
-        ('pro', 'Pro — 5 so‘m'),
-        ('business', 'Business — 10 so‘m'),
+        ('pro', 'Pro'),
+        ('business', 'Business'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     plan = models.CharField(max_length=20, choices=PLAN_CHOICES)
-    amount = models.PositiveIntegerField()  # so‘m
+    amount = models.PositiveIntegerField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    stripe_session_id = models.CharField(max_length=255, blank=True)
+    stripe_payment_intent = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     paid_at = models.DateTimeField(blank=True, null=True)
-    note = models.TextField(blank=True, help_text="Admin izohi")
 
     class Meta:
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.user.username} — {self.get_plan_display()} ({self.status})"
-
-
+        return f"{self.user.username} — {self.plan} ({self.status})"

@@ -48,7 +48,7 @@
                     {% if user.profile.plan == 'pro' or user.profile.plan == 'business' %}
                         <button class="btn btn-success w-100 mt-auto" disabled>Faol</button>
                     {% else %}
-                        <a href="{% url 'buy_plan' 'pro' %}" class="btn btn-primary w-100 mt-auto">Sotib olish — 5 so‘m</a>
+                        <a href="{% url 'checkout' 'pro' %}" class="btn btn-primary w-100 mt-auto">Sotib olish — 5 so‘m</a>
                     {% endif %}
                 {% else %}
                     <a href="{% url 'signup' %}" class="btn btn-primary w-100 mt-auto">Avval ro‘yxatdan o‘ting</a>
@@ -72,7 +72,7 @@
                     {% if user.profile.plan == 'business' %}
                         <button class="btn btn-success w-100 mt-auto" disabled>Faol</button>
                     {% else %}
-                        <a href="{% url 'buy_plan' 'business' %}" class="btn btn-outline-warning w-100 mt-auto">Sotib olish — 10 so‘m</a>
+                        <a href="{% url 'checkout' 'business' %}" class="btn btn-outline-warning w-100 mt-auto">Sotib olish — 10 so‘m</a>
                     {% endif %}
                 {% else %}
                     <a href="{% url 'signup' %}" class="btn btn-outline-warning w-100 mt-auto">Avval ro‘yxatdan o‘ting</a>

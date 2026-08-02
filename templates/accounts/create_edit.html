@@ -30,31 +30,59 @@
                     </div>
 
                     <!-- Dizayn -->
-                    <h5 class="text-primary mb-3 mt-4"><i class="bi bi-palette me-2"></i>Dizayn</h5>
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            <label class="form-label">Fon rangi</label>
-                            {{ form.background_color }}
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Matn rangi</label>
-                            {{ form.text_color }}
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Accent rangi</label>
-                            {{ form.accent_color }}
-                        </div>
-                    </div>
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label class="form-label">Logo</label>
-                            {{ form.logo }}
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Favicon</label>
-                            {{ form.favicon }}
-                        </div>
-                    </div>
+<h5 class="text-primary mb-3 mt-4"><i class="bi bi-palette me-2"></i>Dizayn va Rasmlar</h5>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <label class="form-label">Fon rangi</label>
+        {{ form.background_color }}
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Matn rangi</label>
+        {{ form.text_color }}
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Accent rangi</label>
+        {{ form.accent_color }}
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <label class="form-label fw-semibold">Logo</label>
+        {{ form.logo }}
+        {% if website and website.logo %}
+            <div class="mt-2">
+                <img src="{{ website.logo.url }}" alt="Logo" style="max-height: 60px; border-radius: 8px;">
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <label class="form-label fw-semibold">Favicon</label>
+        {{ form.favicon }}
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <label class="form-label fw-semibold">Hero rasm (katta rasm)</label>
+        {{ form.hero_image }}
+        {% if website and website.hero_image %}
+            <div class="mt-2">
+                <img src="{{ website.hero_image.url }}" alt="Hero" style="max-height: 120px; border-radius: 8px;">
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <label class="form-label fw-semibold">About rasm</label>
+        {{ form.about_image }}
+        {% if website and website.about_image %}
+            <div class="mt-2">
+                <img src="{{ website.about_image.url }}" alt="About" style="max-height: 120px; border-radius: 8px;">
+            </div>
+        {% endif %}
+    </div>
+</div>
 
                     <!-- Hero -->
                     <h5 class="text-primary mb-3 mt-4"><i class="bi bi-stars me-2"></i>Hero bo‘limi</h5>

@@ -51,13 +51,14 @@ class WebsiteForm(forms.ModelForm):
         model = Website
         fields = [
             'title', 'meta_title', 'meta_description',
-            'logo', 'favicon',
+            'logo', 'favicon', 'hero_image', 'about_image',
             'background_color', 'text_color', 'accent_color',
             'hero_title', 'hero_subtitle', 'hero_button_text', 'hero_button_link',
             'about_title', 'about_content',
             'services_title', 'services_content',
             'contact_title', 'contact_email', 'contact_phone',
             'contact_address', 'contact_telegram', 'contact_instagram',
+            'custom_domain', 'remove_branding',
             'custom_css', 'is_published'
         ]
         widgets = {
@@ -74,19 +75,22 @@ class WebsiteForm(forms.ModelForm):
             'about_title': forms.TextInput(attrs={'class': 'form-control'}),
             'about_content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
             'services_title': forms.TextInput(attrs={'class': 'form-control'}),
-            'services_content': forms.Textarea(attrs={'class': 'form-control', 'rows': 6, 'placeholder': 'Har bir xizmatni yangi qatordan yozing'}),
+            'services_content': forms.Textarea(attrs={'class': 'form-control', 'rows': 6}),
             'contact_title': forms.TextInput(attrs={'class': 'form-control'}),
             'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
             'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
             'contact_address': forms.TextInput(attrs={'class': 'form-control'}),
-            'contact_telegram': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '@username'}),
-            'contact_instagram': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'username'}),
+            'contact_telegram': forms.TextInput(attrs={'class': 'form-control'}),
+            'contact_instagram': forms.TextInput(attrs={'class': 'form-control'}),
+            'custom_domain': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'masalan: mening-saytim.uz'}),
             'custom_css': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'is_published': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'remove_branding': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'logo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'favicon': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'hero_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'about_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
-
 
 class ProfileForm(forms.ModelForm):
     class Meta:
