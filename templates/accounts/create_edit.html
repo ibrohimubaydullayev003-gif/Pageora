@@ -1,0 +1,155 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}{{ title }} — Pageora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card p-4 p-md-5">
+                <h3 class="fw-bold mb-4">{{ title }}</h3>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Asosiy -->
+                    <h5 class="text-primary mb-3"><i class="bi bi-info-circle me-2"></i>Asosiy ma’lumotlar</h5>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Sayt nomi *</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Meta Title (SEO)</label>
+                            {{ form.meta_title }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Meta Description (SEO)</label>
+                            {{ form.meta_description }}
+                        </div>
+                    </div>
+
+                    <!-- Dizayn -->
+                    <h5 class="text-primary mb-3 mt-4"><i class="bi bi-palette me-2"></i>Dizayn</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label">Fon rangi</label>
+                            {{ form.background_color }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Matn rangi</label>
+                            {{ form.text_color }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Accent rangi</label>
+                            {{ form.accent_color }}
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Logo</label>
+                            {{ form.logo }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Favicon</label>
+                            {{ form.favicon }}
+                        </div>
+                    </div>
+
+                    <!-- Hero -->
+                    <h5 class="text-primary mb-3 mt-4"><i class="bi bi-stars me-2"></i>Hero bo‘limi</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Hero sarlavha</label>
+                        {{ form.hero_title }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Hero pastki matn</label>
+                        {{ form.hero_subtitle }}
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Tugma matni</label>
+                            {{ form.hero_button_text }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tugma havolasi</label>
+                            {{ form.hero_button_link }}
+                        </div>
+                    </div>
+
+                    <!-- About -->
+                    <h5 class="text-primary mb-3 mt-4"><i class="bi bi-person me-2"></i>Men haqimda</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Sarlavha</label>
+                        {{ form.about_title }}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Matn</label>
+                        {{ form.about_content }}
+                    </div>
+
+                    <!-- Services -->
+                    <h5 class="text-primary mb-3 mt-4"><i class="bi bi-briefcase me-2"></i>Xizmatlar</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Sarlavha</label>
+                        {{ form.services_title }}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Xizmatlar ro‘yxati</label>
+                        {{ form.services_content }}
+                    </div>
+
+                    <!-- Contact -->
+                    <h5 class="text-primary mb-3 mt-4"><i class="bi bi-envelope me-2"></i>Bog‘lanish</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Sarlavha</label>
+                        {{ form.contact_title }}
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            {{ form.contact_email }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Telefon</label>
+                            {{ form.contact_phone }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Manzil</label>
+                        {{ form.contact_address }}
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Telegram</label>
+                            {{ form.contact_telegram }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Instagram</label>
+                            {{ form.contact_instagram }}
+                        </div>
+                    </div>
+
+                    <!-- Qo‘shimcha -->
+                    <h5 class="text-primary mb-3 mt-4"><i class="bi bi-code-slash me-2"></i>Qo‘shimcha</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Custom CSS (ixtiyoriy)</label>
+                        {{ form.custom_css }}
+                    </div>
+                    <div class="form-check mb-4">
+                        {{ form.is_published }}
+                        <label class="form-check-label" for="{{ form.is_published.id_for_label }}">
+                            Nashr etish (hamma ko‘ra olsin)
+                        </label>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-primary px-5">{{ button_text }}</button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline-light">Bekor qilish</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

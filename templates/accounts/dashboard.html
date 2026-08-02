@@ -1,0 +1,108 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Dashboard — Pageora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Stats -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-secondary small mb-1">Jami saytlar</p>
+                        <h3 class="fw-bold mb-0">{{ website_count }} / {{ website_limit }}</h3>
+                    </div>
+                    <i class="bi bi-collection fs-2 text-primary opacity-75"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-secondary small mb-1">Jami ko‘rishlar</p>
+                        <h3 class="fw-bold mb-0">{{ total_views }}</h3>
+                    </div>
+                    <i class="bi bi-eye fs-2 text-primary opacity-75"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-secondary small mb-1">Joriy tarif</p>
+                        <h3 class="fw-bold mb-0">{{ plan }}</h3>
+                    </div>
+                    <i class="bi bi-crown fs-2 text-warning opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold mb-1">Mening saytlarim</h2>
+            <p class="text-secondary mb-0">Barcha yaratgan one-page saytlaringiz</p>
+        </div>
+        <a href="{% url 'create_website' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-2"></i>Yangi sayt
+        </a>
+    </div>
+
+    {% if websites %}
+    <div class="row g-4">
+        {% for site in websites %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card site-card h-100 p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="fw-bold mb-0 text-truncate" style="max-width: 70%;">{{ site.title }}</h5>
+                    {% if site.is_published %}
+                        <span class="badge bg-success bg-opacity-25 text-success">Online</span>
+                    {% else %}
+                        <span class="badge bg-secondary bg-opacity-25 text-secondary">Qoralama</span>
+                    {% endif %}
+                </div>
+                
+                <p class="text-secondary small mb-3">
+                    {{ site.hero_subtitle|default:"Tavsif yo‘q"|truncatechars:70 }}
+                </p>
+
+                <div class="d-flex align-items-center gap-3 mb-4 small text-secondary">
+                    <span><i class="bi bi-eye me-1"></i>{{ site.views_count }}</span>
+                    <span><i class="bi bi-link-45deg me-1"></i>/s/{{ site.slug }}/</span>
+                </div>
+
+                <div class="d-flex gap-2 mt-auto">
+                    <a href="{% url 'edit_website' site.pk %}" class="btn btn-sm btn-outline-light flex-fill">
+                        <i class="bi bi-pencil"></i> Tahrirlash
+                    </a>
+                    <a href="{% url 'public_site' site.slug %}" target="_blank" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                    <form method="post" action="{% url 'delete_website' site.pk %}" 
+                          onsubmit="return confirm('Rostdan ham o‘chirmoqchimisiz?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card p-5 text-center">
+        <i class="bi bi-journal-x display-3 text-secondary mb-3"></i>
+        <h4 class="fw-bold">Hali sayt yaratmagansiz</h4>
+        <p class="text-secondary mb-4">Birinchi professional one-page saytingizni yarating!</p>
+        <a href="{% url 'create_website' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-2"></i>Yaratish
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Tariflar — Pageora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold display-5">Oddiy va shaffof tariflar</h1>
+        <p class="text-secondary lead">Kerakli tarifni tanlang va o‘sib boring</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Free -->
+        <div class="col-md-4">
+            <div class="card h-100 p-4 text-center">
+                <h5 class="text-secondary">Free</h5>
+                <h2 class="fw-bold my-3">0 so‘m</h2>
+                <p class="text-secondary small">Abadiy bepul</p>
+                <ul class="list-unstyled text-start my-4">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>3 ta sayt</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Asosiy dizayn</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>SEO sozlamalari</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Statistika</li>
+                    <li class="mb-2 text-secondary"><i class="bi bi-x-circle me-2"></i>Custom domain</li>
+                    <li class="text-secondary"><i class="bi bi-x-circle me-2"></i>Priority support</li>
+                </ul>
+                <a href="{% url 'signup' %}" class="btn btn-outline-light w-100 mt-auto">Boshlash</a>
+            </div>
+        </div>
+
+        <!-- Pro -->
+        <div class="col-md-4">
+            <div class="card h-100 p-4 text-center border-primary" style="border-width: 2px !important;">
+                <span class="badge bg-primary mb-2">Eng mashhur</span>
+                <h5 class="text-primary">Pro</h5>
+                <h2 class="fw-bold my-3">49 000 so‘m<span class="fs-6 text-secondary">/oy</span></h2>
+                <p class="text-secondary small">Professional foydalanish</p>
+                <ul class="list-unstyled text-start my-4">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>20 ta sayt</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Barcha dizayn imkoniyatlari</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Custom CSS</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Logo & Favicon</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Statistika</li>
+                    <li class="mb-2 text-secondary"><i class="bi bi-x-circle me-2"></i>Custom domain</li>
+                </ul>
+                <button class="btn btn-primary w-100 mt-auto" disabled>Tez orada</button>
+            </div>
+        </div>
+
+        <!-- Business -->
+        <div class="col-md-4">
+            <div class="card h-100 p-4 text-center">
+                <h5 class="text-warning">Business</h5>
+                <h2 class="fw-bold my-3">149 000 so‘m<span class="fs-6 text-secondary">/oy</span></h2>
+                <p class="text-secondary small">Jamoalar va agentliklar</p>
+                <ul class="list-unstyled text-start my-4">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>100 ta sayt</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Barcha Pro imkoniyatlari</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Custom domain</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Priority support</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>White-label</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>API access</li>
+                </ul>
+                <button class="btn btn-outline-warning w-100 mt-auto" disabled>Tez orada</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

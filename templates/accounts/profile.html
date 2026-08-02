@@ -1,0 +1,53 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Profil — Pageora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card p-4 p-md-5">
+                <h3 class="fw-bold mb-4">Profil sozlamalari</h3>
+                
+                <div class="mb-4">
+                    <p class="text-secondary mb-1">Foydalanuvchi nomi</p>
+                    <h5>{{ user.username }}</h5>
+                </div>
+                <div class="mb-4">
+                    <p class="text-secondary mb-1">Email</p>
+                    <h5>{{ user.email }}</h5>
+                </div>
+                <div class="mb-4">
+                    <p class="text-secondary mb-1">Joriy tarif</p>
+                    <span class="badge bg-primary badge-plan">{{ profile.get_plan_display }}</span>
+                </div>
+
+                <hr class="border-secondary my-4">
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Avatar</label>
+                        {{ form.avatar }}
+                        {% if profile.avatar %}
+                        <div class="mt-2">
+                            <img src="{{ profile.avatar.url }}" alt="Avatar" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Bio</label>
+                        {{ form.bio }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </form>
+
+                <hr class="border-secondary my-4">
+                <a href="{% url 'change_password' %}" class="btn btn-outline-light">
+                    <i class="bi bi-key me-2"></i>Parolni o‘zgartirish
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Pageora — Professional One-Page Website Builder{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center min-vh-75 py-5">
+            <div class="col-lg-7 text-center text-lg-start">
+                <span class="badge bg-primary bg-opacity-25 text-primary mb-3 px-3 py-2 rounded-pill">
+                    🚀 2026 yilning eng tezkor builder’i
+                </span>
+                <h1 class="display-3 fw-bold mb-4 lh-sm">
+                    Professional <span class="text-primary">bir sahifali</span> saytingizni daqiqalar ichida yarating
+                </h1>
+                <p class="lead text-secondary mb-5 col-lg-10">
+                    Kod yozmasdan, chiroyli, tez va SEO-ga mos landing page yarating. 
+                    Portfolio, biznes, shaxsiy brend — hammasi uchun ideal.
+                </p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                    <a href="{% url 'signup' %}" class="btn btn-primary btn-lg px-5">
+                        <i class="bi bi-rocket-takeoff me-2"></i>Bepul boshlash
+                    </a>
+                    <a href="{% url 'pricing' %}" class="btn btn-outline-light btn-lg px-4">
+                        Tariflarni ko‘rish
+                    </a>
+                </div>
+                <div class="mt-5 d-flex gap-4 justify-content-center justify-content-lg-start text-secondary small">
+                    <div><i class="bi bi-check-circle-fill text-success me-1"></i> Kredit karta kerak emas</div>
+                    <div><i class="bi bi-check-circle-fill text-success me-1"></i> 3 ta sayt bepul</div>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="card p-4 shadow-lg" style="transform: rotate(2deg);">
+                    <div class="d-flex gap-2 mb-3">
+                        <div class="rounded-circle bg-danger" style="width:12px;height:12px;"></div>
+                        <div class="rounded-circle bg-warning" style="width:12px;height:12px;"></div>
+                        <div class="rounded-circle bg-success" style="width:12px;height:12px;"></div>
+                    </div>
+                    <div class="bg-dark rounded-3 p-4 text-center">
+                        <h4 class="text-primary mb-2">Sizning Saytingiz</h4>
+                        <p class="text-secondary small mb-0">Chiroyli, tez, professional</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Nima uchun Pageora?</h2>
+            <p class="text-secondary">Oddiy, lekin kuchli imkoniyatlar</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 p-4 text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-lightning-charge-fill text-primary fs-1"></i>
+                    </div>
+                    <h5 class="fw-bold">Juda tez</h5>
+                    <p class="text-secondary mb-0">5 daqiqada tayyor landing page. Kod yozish shart emas.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 p-4 text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-palette-fill text-primary fs-1"></i>
+                    </div>
+                    <h5 class="fw-bold">To‘liq sozlanuvchi</h5>
+                    <p class="text-secondary mb-0">Ranglar, matnlar, logo, SEO — hammasi sizning qo‘lingizda.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 p-4 text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-graph-up-arrow text-primary fs-1"></i>
+                    </div>
+                    <h5 class="fw-bold">Statistika</h5>
+                    <p class="text-secondary mb-0">Har bir saytingiz necha marta ko‘rilganini kuzating.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
