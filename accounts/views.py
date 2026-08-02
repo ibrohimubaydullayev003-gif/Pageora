@@ -152,3 +152,46 @@ def change_password(request):
 
 def pricing(request):
     return render(request, 'accounts/pricing.html')
+
+
+
+
+from django.utils import timezone
+from .models import Website, Profile, Order
+
+
+@login_required
+def buy_plan(request, plan):
+    """Tarif sotib olish (buyurtma yaratish)"""
+    if plan not in ['pro', 'business']:
+        messages.error(request, "Noto‘g‘ri tarif.")
+        return redirect('pricing')
+
+    prices = {
+        'pro': 5,
+        'business': 10,
+    }
+    amount = prices[plan]
+
+    # Oldingi pending buyurtmani bekor qilish (ixtiyoriy)
+    Order.objects.filter(user=request.user, status='pending').update(status='cancelled')
+
+    order = Order.objects.create(
+        user=request.user,
+        plan=plan,
+        amount=amount,
+        status='pending'
+    )
+
+    messages.success(
+        request,
+        f"Buyurtma yaratildi! {amount} so‘m to‘lang va admin tasdiqlashini kuting. "
+        f"Buyurtma raqami: #{order.id}"
+    )
+    return redirect('my_orders')
+
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'accounts/my_orders.html', {'orders': orders})

@@ -120,3 +120,34 @@ class Website(models.Model):
     def increment_views(self):
         self.views_count += 1
         self.save(update_fields=['views_count'])
+
+
+
+
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Kutilmoqda'),
+        ('paid', 'To‘langan'),
+        ('cancelled', 'Bekor qilingan'),
+    ]
+
+    PLAN_CHOICES = [
+        ('pro', 'Pro — 5 so‘m'),
+        ('business', 'Business — 10 so‘m'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    plan = models.CharField(max_length=20, choices=PLAN_CHOICES)
+    amount = models.PositiveIntegerField()  # so‘m
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    paid_at = models.DateTimeField(blank=True, null=True)
+    note = models.TextField(blank=True, help_text="Admin izohi")
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username} — {self.get_plan_display()} ({self.status})"
+
+

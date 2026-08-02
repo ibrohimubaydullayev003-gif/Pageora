@@ -15,4 +15,6 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('change-password/', views.change_password, name='change_password'),
     path('pricing/', views.pricing, name='pricing'),
+    path('buy/<str:plan>/', views.buy_plan, name='buy_plan'),
+    path('my-orders/', views.my_orders, name='my_orders'),
 ]
