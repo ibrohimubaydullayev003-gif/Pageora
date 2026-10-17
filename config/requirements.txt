@@ -1,0 +1,8 @@
+
+Django==6.0.7
+gunicorn
+django-crispy-forms
+crispy-bootstrap5
+Pillow
+stripe
+whitenoise
